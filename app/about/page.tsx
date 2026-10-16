@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Coffee, ArrowLeft, Heart, Award, Globe } from "lucide-react";
+import { ArrowLeft, Heart, Award, Globe } from "lucide-react";
 
 export default function AboutPage() {
   return (
@@ -17,7 +17,7 @@ export default function AboutPage() {
         <div className="bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-stone-200 mb-12">
           <h2 className="text-2xl font-bold text-stone-900 mb-4">Crafting Perfection Since 2020</h2>
           <p className="text-stone-600 leading-relaxed mb-6">
-            Bean & Brew started with a simple belief: great coffee shouldn't just wake you up; it should tell a story. Founded by master roasters and devoted coffee enthusiasts, we partner directly with independent family farms across Ethiopia, Colombia, and Sumatra.
+            Bean & Brew started with a simple belief: great coffee should not just wake you up; it should tell a story. Founded by master roasters and devoted coffee enthusiasts, we partner directly with independent family farms across Ethiopia, Colombia, and Sumatra.
           </p>
           <p className="text-stone-600 leading-relaxed">
             Every green bean is hand-inspected and micro-roasted in small batches to preserve its distinct geographic flavor notes. Whether you prefer a bright morning pour-over or a rich, creamy espresso shot, our mission is to deliver café-quality excellence straight to your kitchen.

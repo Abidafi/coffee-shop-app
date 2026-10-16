@@ -1,17 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Search, Filter, ArrowLeft } from "lucide-react";
-
-export interface CoffeeItem {
-  id: string;
-  title: string;
-  category: string;
-  price: number;
-  rating: number;
-  description: string;
-  image: string;
-}
+import { Search, ArrowLeft } from "lucide-react";
+import { CoffeeItem } from "@/types/coffee";
 
 const INITIAL_ITEMS: CoffeeItem[] = [
   { id: "1", title: "Ethiopian Yirgacheffe", category: "Single Origin", price: 18.50, rating: 4.8, description: "Bright acidity with floral notes and smooth jasmine undertones.", image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&q=80&w=600" },
@@ -39,8 +30,10 @@ export default function ItemsPage() {
     }
   }, []);
 
-  const filteredItems = items.filter(item => {
-    const matchesSearch = item.title.toLowerCase().includes(search.toLowerCase()) || item.description.toLowerCase().includes(search.toLowerCase());
+  const filteredItems = items.filter((item) => {
+    const matchesSearch =
+      item.title.toLowerCase().includes(search.toLowerCase()) ||
+      item.description.toLowerCase().includes(search.toLowerCase());
     const matchesCategory = selectedCategory === "All" || item.category === selectedCategory;
     const matchesPrice = item.price <= maxPrice;
     return matchesSearch && matchesCategory && matchesPrice;
@@ -51,7 +44,12 @@ export default function ItemsPage() {
       <div className="bg-stone-900 text-white py-12 px-4 mb-8">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div>
-            <Link href="/" className="text-amber-400 text-sm font-semibold flex items-center gap-1 mb-2 hover:underline"><ArrowLeft className="w-4 h-4"/> Back to Home</Link>
+            <Link
+              href="/"
+              className="text-amber-400 text-sm font-semibold flex items-center gap-1 mb-2 hover:underline"
+            >
+              <ArrowLeft className="w-4 h-4" /> Back to Home
+            </Link>
             <h1 className="text-3xl font-bold">Artisan Menu & Catalog</h1>
           </div>
         </div>
@@ -61,10 +59,10 @@ export default function ItemsPage() {
         {/* Search & Filters */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-stone-200 mb-8 grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="relative">
-            <Search className="absolute left-3.5 top-3.5 w-5 h-5 text-stone-400"/>
-            <input 
-              type="text" 
-              placeholder="Search coffee or equipment..." 
+            <Search className="absolute left-3.5 top-3.5 w-5 h-5 text-stone-400" />
+            <input
+              type="text"
+              placeholder="Search coffee or equipment..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-11 pr-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:border-amber-600"
@@ -72,7 +70,7 @@ export default function ItemsPage() {
           </div>
 
           <div>
-            <select 
+            <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:border-amber-600"
@@ -85,11 +83,13 @@ export default function ItemsPage() {
           </div>
 
           <div className="flex items-center gap-3 px-2">
-            <span className="text-xs text-stone-500 whitespace-nowrap">Max Price: ${maxPrice}</span>
-            <input 
-              type="range" 
-              min="10" 
-              max="50" 
+            <span className="text-xs text-stone-500 whitespace-nowrap">
+              Max Price: ${maxPrice}
+            </span>
+            <input
+              type="range"
+              min="10"
+              max="50"
               value={maxPrice}
               onChange={(e) => setMaxPrice(Number(e.target.value))}
               className="w-full accent-amber-700"
@@ -100,21 +100,39 @@ export default function ItemsPage() {
         {/* Grid Display */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredItems.map((item) => (
-            <div key={item.id} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-stone-200 hover:shadow-md transition group flex flex-col justify-between">
+            <div
+              key={item.id}
+              className="bg-white rounded-2xl overflow-hidden shadow-sm border border-stone-200 hover:shadow-md transition group flex flex-col justify-between"
+            >
               <div>
                 <div className="h-52 bg-stone-100 overflow-hidden relative">
-                  <img src={item.image || "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd"} alt={item.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500"/>
-                  <span className="absolute top-3 right-3 bg-stone-900/80 backdrop-blur-md text-white text-xs px-2.5 py-1 rounded-full font-medium">★ {item.rating}</span>
+                  <img
+                    src={item.image || "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd"}
+                    alt={item.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                  />
+                  <span className="absolute top-3 right-3 bg-stone-900/80 backdrop-blur-md text-white text-xs px-2.5 py-1 rounded-full font-medium">
+                    ★ {item.rating}
+                  </span>
                 </div>
                 <div className="p-6">
-                  <span className="text-xs font-semibold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md">{item.category}</span>
+                  <span className="text-xs font-semibold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-md">
+                    {item.category}
+                  </span>
                   <h3 className="text-lg font-bold mt-2 text-stone-900">{item.title}</h3>
-                  <p className="text-stone-600 text-sm mt-1 line-clamp-2">{item.description}</p>
+                  <p className="text-stone-600 text-sm mt-1 line-clamp-2">
+                    {item.description}
+                  </p>
                 </div>
               </div>
               <div className="p-6 pt-0 flex items-center justify-between">
-                <span className="text-xl font-bold text-stone-900">${item.price.toFixed(2)}</span>
-                <Link href={`/items/${item.id}`} className="bg-stone-900 hover:bg-amber-800 text-white text-sm font-medium px-5 py-2.5 rounded-xl transition">
+                <span className="text-xl font-bold text-stone-900">
+                  ${item.price.toFixed(2)}
+                </span>
+                <Link
+                  href={`/items/${item.id}`}
+                  className="bg-stone-900 hover:bg-amber-800 text-white text-sm font-medium px-5 py-2.5 rounded-xl transition"
+                >
                   View Details
                 </Link>
               </div>

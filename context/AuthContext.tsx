@@ -1,13 +1,12 @@
-"tsx"
 "use client";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { 
-  onAuthStateChanged, 
-  User, 
-  signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword, 
-  signInWithPopup, 
-  signOut 
+import {
+  onAuthStateChanged,
+  User,
+  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
+  signOut,
 } from "firebase/auth";
 import { auth, googleProvider } from "@/lib/firebase";
 
@@ -18,13 +17,21 @@ interface AuthContextType {
   logout: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType>({ user: null, loading: true, signInWithGoogle: async () => {}, logout: async () => {} });
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  loading: true,
+  signInWithGoogle: async () => {},
+  logout: async () => {},
+});
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Pick up redirect result on page load
+    getRedirectResult(auth).catch((err) => console.error("Redirect result error:", err));
+
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
@@ -33,7 +40,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const signInWithGoogle = async () => {
-    await signInWithPopup(auth, googleProvider);
+    try {
+      await signInWithPopup(auth, googleProvider);
+    } catch (err: any) {
+      // Fallback to redirect if popup is blocked
+      if (
+        err.code === "auth/popup-blocked" ||
+        err.code === "auth/popup-closed-by-user" ||
+        err.code === "auth/cancelled-popup-request"
+      ) {
+        await signInWithRedirect(auth, googleProvider);
+      } else {
+        throw err;
+      }
+    }
   };
 
   const logout = async () => {

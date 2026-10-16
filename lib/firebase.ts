@@ -10,6 +10,10 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
+if (!firebaseConfig.apiKey) {
+  console.error("❌ Firebase env vars missing. Check Vercel project settings.");
+}
+
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();

@@ -25,8 +25,8 @@ export default function LoginPage() {
         await signInWithEmailAndPassword(auth, email, password);
       }
       router.push("/");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "An error occurred");
     }
   };
 
@@ -34,8 +34,8 @@ export default function LoginPage() {
     try {
       await signInWithGoogle();
       router.push("/");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "An error occurred");
     }
   };
 
